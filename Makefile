@@ -4,5 +4,5 @@ init:
 run:
 	python .\pi_alarm.py
 
-init:
-	cmd /k .venv\Scripts\activate
+mpd:
+	cd .\tools\mpd-0.21.24\ && mpd.exe mpd.conf

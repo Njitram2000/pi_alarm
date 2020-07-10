@@ -19,8 +19,6 @@ class NumpadCapture:
         keyboard.wait('esc')
 
     def processKey(self, name, scan_code):
-        print(name)
-
         if name == 'enter':
             self.mpd_client.play_pause()
         elif name == 'backspace':

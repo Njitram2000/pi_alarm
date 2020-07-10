@@ -5,7 +5,6 @@ from pi_alarm.alarm import Alarm
 
 def main():
     client = AlarmMPDClient()
-    client.connect()
     NumpadCapture(client)
 
 
