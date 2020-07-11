@@ -1,3 +1,4 @@
+from typing import List
 from pi_alarm.talk_to_me import TalkToMe
 from mpd import MPDClient
 
@@ -36,7 +37,7 @@ class AlarmMPDClient:
     def next_song(self):
         self.client.next()
 
-    def get_all_playlists(self) -> []:
+    def get_all_playlists(self) -> List[str]:
         return list(map(lambda pl: pl['playlist'], self.client.listplaylists()))
 
     '''

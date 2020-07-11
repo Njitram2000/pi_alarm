@@ -1,48 +1,99 @@
+from abc import ABC, abstractmethod
+from pi_alarm.alarm import Alarm, WakeupTime
+from pi_alarm.talk_to_me import TalkToMe
 from pi_alarm.mpd_client import AlarmMPDClient
 import keyboard
 import platform
-import subprocess
 
 
 class NumpadCapture:
-    def __init__(self, mpd_client: AlarmMPDClient):
-        self.mpd_client = mpd_client
-        self.isWindows = platform.system() == 'Windows'
+    def __init__(self, mpd_client: AlarmMPDClient, alarm: Alarm):
+        self.__mpd_client = mpd_client
+        self.__isWindows = platform.system() == 'Windows'
+        self.__current_key_sequence: KeySequence = None
+        self.__alarm = alarm
         keyboard.on_release(lambda e: self.processKey(e.name, e.scan_code))
+
+    def start(self):
+        print('Numpad ready')
         keyboard.wait('esc')
 
     def processKey(self, name, scan_code):
         if name == 'enter':
-            self.mpd_client.play_pause()
+            self.__mpd_client.play_pause()
         elif name == 'backspace':
-            self.mpd_client.stop()
+            self.__mpd_client.stop()
         elif name == '-':
-            self.mpd_client.prev_song()
+            self.__mpd_client.prev_song()
         elif name == '+':
-            self.mpd_client.next_song()
+            self.__mpd_client.next_song()
         elif name == '+':
-            self.mpd_client.next_song()
+            self.__mpd_client.next_song()
         elif name == 'right':
-            self.mpd_client.next_playlist()
+            self.__mpd_client.next_playlist()
         elif name == 'left':
-            self.mpd_client.prev_playlist()
+            self.__mpd_client.prev_playlist()
         # *
         elif scan_code == 55:
-            # cancel
-            i = 0
+            self.__current_key_sequence = None
         # / on windows
-        elif scan_code == 53 & self.isWindows == True:
-            # set time
-            i = 0
-            # subprocess.run(['tools/vlc-3.0.11/vlc', '-I dummy', '--dummy-quiet', 'http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q='+name+'&tl=en', 'vlc://quit'])
+        elif scan_code == 53 and self.__isWindows == True:
+            self.__input_time()
         # / on linux
-        elif scan_code == 98 & self.isWindows == False:
-            # set time
+        elif scan_code == 98 and self.__isWindows == False:
+            self.__input_time()
             i = 0
-            # subprocess.run(['tools/vlc-3.0.11/vlc', '-I dummy', '--dummy-quiet', 'http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q='+name+'&tl=en', 'vlc://quit'])
-        else:
+        elif self.__current_key_sequence is not None:
             try:
-                number = int(name)
-                # process number input
+                # check if it can be converted to int (so is number input)
+                int(name)
+                self.__current_key_sequence.input(name)
+                if self.__current_key_sequence.isComplete():
+                    self.__current_key_sequence.onComplete()
+                    self.__current_key_sequence = None
             except ValueError as e:
                 pass
+    
+    def __input_time(self):
+        self.__current_key_sequence = WakeupTimeKeySequence(self.__alarm)
+        TalkToMe.speak('Set time')
+
+class KeySequence(ABC):
+    __sequence = []
+
+    def __init__(self, max_length: int) -> None:
+        self.__max_length = max_length
+
+    def input(self, key: str):
+        self.sequence = self.sequence + [key]
+
+    def isComplete(self) -> bool:
+        return len(self.__sequence) == self.__max_length
+
+    @abstractmethod
+    def onComplete(self):
+        pass
+
+    @property
+    def sequence(self) -> str:
+        return self.__sequence
+
+    @sequence.setter
+    def sequence(self, new_sequence):
+        if not self.isComplete():
+            self.__sequence = new_sequence
+
+
+class WakeupTimeKeySequence(KeySequence):
+    def __init__(self, alarm: Alarm) -> None:
+        super().__init__(4)
+        self.__alarm = alarm
+
+    @property
+    def wakeup_time(self) -> WakeupTime:
+        if self.isComplete():
+            return WakeupTime(int(''.join(self.sequence[0:2])), int(''.join(self.sequence[2:4])))
+    
+    def onComplete(self):
+        wakeup_time = self.wakeup_time
+        self.__alarm.wakeup_time = wakeup_time
