@@ -1,20 +1,13 @@
-from pi_alarm.alarm_mpd_client import AlarmMPDClient
+from pi_alarm.mpd_client import AlarmMPDClient
 import keyboard
 import platform
 import subprocess
-
-from apscheduler.schedulers.background import BackgroundScheduler
 
 
 class NumpadCapture:
     def __init__(self, mpd_client: AlarmMPDClient):
         self.mpd_client = mpd_client
         self.isWindows = platform.system() == 'Windows'
-        # self.scheduler = BackgroundScheduler()
-        # self.job = self.scheduler.add_job(self.printMe, 'interval', seconds=1)
-        # self.scheduler.add_job(printMe, 'date')
-        # self.scheduler.start()
-        # self.job.remove()
         keyboard.on_release(lambda e: self.processKey(e.name, e.scan_code))
         keyboard.wait('esc')
 

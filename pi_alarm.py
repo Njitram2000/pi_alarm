@@ -1,10 +1,11 @@
-from pi_alarm.alarm_mpd_client import AlarmMPDClient
+from pi_alarm.mpd_client import AlarmMPDClient
 from pi_alarm.numpad_capture import NumpadCapture
 from pi_alarm.alarm import Alarm
 
 
 def main():
     client = AlarmMPDClient()
+    alarm = Alarm(client)
     NumpadCapture(client)
 
 

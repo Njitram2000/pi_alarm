@@ -17,6 +17,9 @@ class AlarmMPDClient:
         self.client.close()
         self.client.disconnect()  # disconnect from the server
 
+    def play(self):
+        self.client.play()
+
     def play_pause(self):
         status = self.client.status()
         if status['state'] == 'stop' or status['state'] == 'pause':
