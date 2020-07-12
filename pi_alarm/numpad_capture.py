@@ -95,5 +95,6 @@ class WakeupTimeKeySequence(KeySequence):
             return WakeupTime(int(''.join(self.sequence[0:2])), int(''.join(self.sequence[2:4])))
     
     def onComplete(self):
+        print('on complete')
         wakeup_time = self.wakeup_time
         self.__alarm.wakeup_time = wakeup_time
