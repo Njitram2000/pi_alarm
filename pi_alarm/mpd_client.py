@@ -1,22 +1,31 @@
 from typing import List
 from pi_alarm.talk_to_me import TalkToMe
-from mpd import MPDClient
+import mpd
 
 
 class AlarmMPDClient:
     def __init__(self):
-        self.client = MPDClient()
+        self.client = mpd.MPDClient()
         # network timeout in seconds (floats allowed), default: None
         self.client.timeout = 10
         # timeout for fetching the result of the idle command is handled seperately, default: None
         self.client.idletimeout = None
-        self.client.connect("localhost", 6600)  # connect to localhost:6600
+        self.__connect()
         self.current_playlist = 0
         self.next_playlist()
+
+    def __connect(self):
+        self.client.connect("localhost", 6600)  # connect to localhost:6600
 
     def disconnect(self):
         self.client.close()
         self.client.disconnect()  # disconnect from the server
+
+    def keep_alive(self):
+        try:
+            self.client.status()
+        except mpd.base.ConnectionError as e:
+            self.__connect()
 
     def play(self):
         self.client.play()

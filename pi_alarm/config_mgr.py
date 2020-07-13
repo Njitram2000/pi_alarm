@@ -1,15 +1,14 @@
 import configparser
 from pi_alarm.wakeup_time import WakeupTime
 import threading
-from typing import Final
 
 
 class ConfigMgr:
-    __CONFIG_FILE: Final = 'config.ini'
-    __DISABLED: Final = 'disabled'
-    __HOURS: Final = 'hours'
-    __MINUTES: Final = 'minutes'
-    __DEFAULT: Final = 'config'
+    __CONFIG_FILE = 'config.ini'
+    __DISABLED = 'disabled'
+    __HOURS = 'hours'
+    __MINUTES = 'minutes'
+    __DEFAULT = 'config'
 
     def __init__(self) -> None:
         self.__lock = threading.RLock()

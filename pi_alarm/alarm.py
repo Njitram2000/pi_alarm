@@ -6,11 +6,10 @@ from pi_alarm.talk_to_me import TalkToMe
 from apscheduler.jobstores.base import JobLookupError
 from apscheduler.schedulers.background import BackgroundScheduler
 from pi_alarm.mpd_client import AlarmMPDClient
-from typing import Final
 
 
 class Alarm:
-    JOB_ID: Final = 'wakeup'
+    JOB_ID = 'wakeup'
 
     def __init__(self, mpd_client: AlarmMPDClient):
         self.__mpd_client = mpd_client

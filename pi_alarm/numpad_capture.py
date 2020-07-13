@@ -19,6 +19,9 @@ class NumpadCapture:
         keyboard.wait('esc')
 
     def processKey(self, name, scan_code):
+        # Will check if the connection has timed out and reconnect if needed
+        self.__mpd_client.test()
+
         if name == 'enter':
             self.__mpd_client.play_pause()
         elif name == 'backspace':
