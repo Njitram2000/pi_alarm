@@ -1,6 +1,13 @@
 # pi-alarm
 An alarm clock running on a raspberry pi playing music from the network using Music Player Daemon (MPD), using a numpad as input and no screen. Written in Python
 
+## development
+I've developed this on windows. For that, you need to be running mpd.exe with a modified version of mpd.conf. Both are in the tools folder  
+The tools folder also includes mpc for a simple way to control mpd without pi-alarm  
+https://linux.die.net/man/5/mpd.conf  
+https://www.musicpd.org/doc/mpc/html/  
+https://python-mpd2.readthedocs.io/en/latest/  
+
 ## setup
 - Install raspberry pi OS
 - add file on ssd boot partition simply called "ssh" to enable ssh
@@ -34,7 +41,7 @@ An alarm clock running on a raspberry pi playing music from the network using Mu
 ### full version
 See mpd.conf
 
-### important parts (tabs are significant)
+### important parts (tabs to separate keys and values)
 music_directory "/mnt/nas_mp3/"  
 playlist_directory  "/mnt/nas_mp3/#mpd_playlists"  
 log_file  "/var/log/mpd/mpd.log"  

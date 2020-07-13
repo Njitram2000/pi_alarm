@@ -20,7 +20,7 @@ class NumpadCapture:
 
     def processKey(self, name, scan_code):
         # Will check if the connection has timed out and reconnect if needed
-        self.__mpd_client.test()
+        self.__mpd_client.keep_alive()
 
         if name == 'enter':
             self.__mpd_client.play_pause()
@@ -38,7 +38,9 @@ class NumpadCapture:
             self.__mpd_client.prev_playlist()
         # *
         elif scan_code == 55:
-            self.__current_key_sequence = None
+            if self.__current_key_sequence is not None:
+                self.__current_key_sequence = None
+                TalkToMe.speak('Cancelled. Still set to ' + self.__alarm.spoken_wakeup_time())
         # / on windows
         elif scan_code == 53 and self.__isWindows == True:
             self.__input_time()

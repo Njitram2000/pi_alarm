@@ -39,8 +39,7 @@ class AlarmMPDClient:
 
     # When stopped, next and prev do not work with mpd so instead pause and then go to beginning of current song
     def stop(self):
-        self.client.pause()
-        self.client.seekcur(0)
+        self.client.stop()
 
     def prev_song(self):
         self.client.previous()

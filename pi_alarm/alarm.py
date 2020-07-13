@@ -35,11 +35,11 @@ class Alarm:
             CONFIG.disabled = False
             CONFIG.wakeup_time = wakeup_time
             self.__reset_alarm()
-            TalkToMe.speak('Now set to ' + self.__spoken_wakeup_time())
+            TalkToMe.speak('Now set to ' + self.spoken_wakeup_time())
         else:
-            TalkToMe.speak('Invalid time. Still set to ' + self.__spoken_wakeup_time())
+            TalkToMe.speak('Invalid time. Still set to ' + self.spoken_wakeup_time())
 
-    def __spoken_wakeup_time(self):
+    def spoken_wakeup_time(self):
         if self.wakeup_time.hours == 0 and self.wakeup_time.minutes == 0:
             return 'midnight'
         elif self.__is_disabled():
@@ -63,6 +63,8 @@ class Alarm:
             self.__scheduler.add_job(self.__ring_alarm, 'date', run_date=self.__next_wakeup_time, id=self.JOB_ID, replace_existing=True)
 
     def __ring_alarm(self):
+        # keep alive needed to keep alive when timed out
+        self.__mpd_client.keep_alive()
         self.__mpd_client.play()
         self.__reset_alarm()
     
