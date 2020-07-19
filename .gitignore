@@ -130,3 +130,6 @@ dmypy.json
 
 # custom
 config.ini
+tools/librespot-java/cache/
+
+tools/librespot-java/credentials.json

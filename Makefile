@@ -6,3 +6,6 @@ run:
 
 mpd:
 	cd .\tools\mpd-0.21.24\ && mpd.exe mpd.conf
+
+spot:
+	cd .\tools\librespot-java\ && java -jar librespot-api-jar-with-dependencies.jar
