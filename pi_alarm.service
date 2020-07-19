@@ -1,5 +1,5 @@
 # Add symlink to this file in /etc/systemd/system
-# sudo ln -s /home/pi/pi-alarm/pi_alarm.service /etc/systemd/system/pi_alarm.service
+# sudo ln -s /home/pi/pi_alarm/pi_alarm.service /etc/systemd/system/pi_alarm.service
 [Unit]
 Description=Pi Alarm Service
 After=network.target

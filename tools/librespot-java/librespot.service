@@ -1,5 +1,5 @@
 # Add symlink to this file in /etc/systemd/system
-# sudo ln -s /home/pi/pi-alarm/tools/librespot-java/librespot.service /etc/systemd/system/librespot.service
+# sudo ln -s /home/pi/pi_alarm/tools/librespot-java/librespot.service /etc/systemd/system/librespot.service
 [Unit]
 Description=Librespot Service
 After=network.target
@@ -10,8 +10,8 @@ Type=simple
 Restart=always
 RestartSec=1
 User=pi
-WorkingDirectory=/home/pi/pi-alarm/tools/librespot-java
-ExecStart=/home/pi/pi-alarm/tools/librespot-java/librespot.sh
+WorkingDirectory=/home/pi/pi_alarm/tools/librespot-java
+ExecStart=/home/pi/pi_alarm/tools/librespot-java/librespot.sh
 
 [Install]
 WantedBy=multi-user.target
