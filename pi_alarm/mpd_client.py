@@ -11,6 +11,8 @@ class AlarmMPDClient:
         # timeout for fetching the result of the idle command is handled seperately, default: None
         self.client.idletimeout = None
         self.__connect()
+        self.random(True)
+        self.repeat(True)
         self.current_playlist = 0
         self.next_playlist()
 
@@ -26,6 +28,12 @@ class AlarmMPDClient:
             self.client.status()
         except mpd.base.ConnectionError as e:
             self.__connect()
+
+    def random(self, isRandom: bool):
+        self.client.random(isRandom)
+        
+    def repeat(self, isRepeat: bool):
+        self.client.repeat(isRepeat)
 
     def play(self):
         self.client.play()
