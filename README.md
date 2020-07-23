@@ -7,6 +7,7 @@ The tools folder also includes mpc for a simple way to control mpd without pi-al
 https://linux.die.net/man/5/mpd.conf  
 https://www.musicpd.org/doc/mpc/html/  
 https://python-mpd2.readthedocs.io/en/latest/  
+https://wiki.videolan.org/Documentation:Command_line/  
 
 ## setup
 - Install raspberry pi OS
@@ -60,14 +61,14 @@ audio_output {
 	mixer_device	"default"	# optional  
 	mixer_control	"PCM"		# optional  
 	mixer_index	"0"		# optional  
-}  
-connection_timeout  "9999999" # Really long timeout of 115 days. You should touch play/pause at least once in that period, right...?  
+}
 
 ### troubleshooting
 manually control service with  
 sudo systemctl stop mpd  
 sudo systemctl start mpd  
 sudo systemctl status mpd  
+sudo journalctl -u pi_alarm  
   
 the mpd log may have root owner because mpd starts as root-ish and then switches to the specified pi user from the conf. chowning the file can help  
 sudo chown pi:pi /var/log/mpd/mpd.log  
