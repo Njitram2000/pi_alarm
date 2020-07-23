@@ -11,6 +11,7 @@ class AlarmMPDClient:
         # timeout for fetching the result of the idle command is handled seperately, default: None
         self.client.idletimeout = None
         self.__connect()
+        self.setvol(50)
         self.random(True)
         self.repeat(True)
         self.current_playlist = 0
@@ -106,3 +107,6 @@ class AlarmMPDClient:
             TalkToMe.speak(all_playlists[self.current_playlist])
         else:
             TalkToMe.speak("There are no playlists loaded")
+    
+    def setvol(self, volume: int):
+        self.client.setvol(volume)
