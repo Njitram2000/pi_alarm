@@ -11,7 +11,7 @@ class AlarmMPDClient:
         # timeout for fetching the result of the idle command is handled seperately, default: None
         self.client.idletimeout = None
         self.__connect()
-        self.setvol(50)
+        self.setvol(40)
         self.random(True)
         self.repeat(True)
         self.current_playlist = 0
