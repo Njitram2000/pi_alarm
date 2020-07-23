@@ -30,11 +30,11 @@ class AlarmMPDClient:
         except mpd.base.ConnectionError as e:
             self.__connect()
 
-    def random(self, isRandom: bool):
-        self.client.random(isRandom)
+    def random(self, is_random: bool):
+        self.client.random(1 if is_random else 0)
         
-    def repeat(self, isRepeat: bool):
-        self.client.repeat(isRepeat)
+    def repeat(self, is_repeat: bool):
+        self.client.repeat(1 if is_repeat else 0)
 
     def play(self):
         self.client.play()
