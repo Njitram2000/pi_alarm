@@ -37,10 +37,6 @@ class NumpadCapture:
             self.__mpd_client.next_playlist()
         elif name == 'left':
             self.__mpd_client.prev_playlist()
-        # Start sleep helper and stop alarm
-        elif name == '0':
-            self.__mpd_client.stop()
-            self.__sleep_helper.start()
         # *
         elif scan_code == 55:
             if self.__current_key_sequence is not None:
@@ -63,6 +59,10 @@ class NumpadCapture:
                     self.__current_key_sequence = None
             except ValueError as e:
                 pass
+        # Start sleep helper and stop alarm
+        elif name == '0':
+            self.__mpd_client.stop()
+            self.__sleep_helper.start()
     
     def __input_time(self):
         self.__current_key_sequence = WakeupTimeKeySequence(self.__alarm)
