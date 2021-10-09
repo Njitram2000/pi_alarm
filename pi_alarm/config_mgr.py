@@ -8,6 +8,7 @@ class ConfigMgr:
     __DISABLED = 'disabled'
     __HOURS = 'hours'
     __MINUTES = 'minutes'
+    __SLEEP_HELPER_GAIN = 'sleep_helper_gain'
     __DEFAULT = 'config'
 
     def __init__(self) -> None:
@@ -18,7 +19,8 @@ class ConfigMgr:
             self.__config[ConfigMgr.__DEFAULT] = {
                 ConfigMgr.__HOURS: '0',
                 ConfigMgr.__MINUTES: '0',
-                ConfigMgr.__DISABLED: 'False'
+                ConfigMgr.__DISABLED: 'False',
+                ConfigMgr.__SLEEP_HELPER_GAIN: '0.20'
             }
             self.__write()
 
@@ -58,6 +60,17 @@ class ConfigMgr:
     def wakeup_time(self, wakeup_time: WakeupTime):
         self.__set_value(ConfigMgr.__HOURS, wakeup_time.hours)
         self.__set_value(ConfigMgr.__MINUTES, wakeup_time.minutes)
+    
+    @property
+    def sleep_helper_gain(self) -> str:
+        return self.__get_value(ConfigMgr.__SLEEP_HELPER_GAIN)
+
+    @sleep_helper_gain.setter
+    def sleep_helper_gain(self, gain: str):
+        if float(gain) < 0:
+            gain = '0'
+        self.__set_value(ConfigMgr.__SLEEP_HELPER_GAIN, gain)
+        print('new gain: ' + self.sleep_helper_gain)
         
 
 #global singleton

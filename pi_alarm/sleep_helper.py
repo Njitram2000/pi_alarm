@@ -1,8 +1,7 @@
+from pi_alarm.talk_to_me import TalkToMe
+from pi_alarm.config_mgr import CONFIG
 import subprocess
 import platform
-import urllib.parse
-import time
-from datetime import datetime
 
 class SleepHelper:
     def __init__(self):
@@ -21,9 +20,7 @@ class SleepHelper:
                             stdout=subprocess.PIPE,
                             stderr=subprocess.STDOUT)
         else:
-            #subprocess.run(['cvlc', '--play-and-exit', '-I dummy', '--quiet', '--gain', '0.20',
-            #                'http://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&q='+urllib.parse.quote(testText)+'&tl=en'])
-            self.__vlcProcess = subprocess.Popen(['cvlc', '--play-and-exit', '-I dummy', '--quiet', '--gain', '0.20',
+            self.__vlcProcess = subprocess.Popen(['cvlc', '--play-and-exit', '-I dummy', '--quiet', '--gain', self.gain,
                             '/home/pi/audio/ocean_10_hours.mp3'],
                             stdout=subprocess.PIPE,
                             stderr=subprocess.STDOUT)
@@ -32,7 +29,7 @@ class SleepHelper:
         if self.isRunning():
            self.__vlcProcess.terminate()
 
-    def isRunning(self):
+    def isRunning(self) -> bool:
         if self.__vlcProcess is None:
             return False
         else:
@@ -43,3 +40,18 @@ class SleepHelper:
                 # reset the member variable to have clean start
                 self.__vlcProcess = None
                 return False
+    @property
+    def gain(self) -> str:
+        return CONFIG.sleep_helper_gain
+
+    def increaseGain(self):
+        new_gain = float(CONFIG.sleep_helper_gain) + 0.01
+        CONFIG.sleep_helper_gain = format(new_gain, '.2f')
+        TalkToMe.speak(CONFIG.sleep_helper_gain)
+    
+    def decreaseGain(self):
+        new_gain = float(CONFIG.sleep_helper_gain) - 0.01
+        if(new_gain < 0):
+            new_gain = 0
+        CONFIG.sleep_helper_gain = format(new_gain, '.2f')
+        TalkToMe.speak(CONFIG.sleep_helper_gain)

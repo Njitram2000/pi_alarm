@@ -37,6 +37,10 @@ class NumpadCapture:
             self.__mpd_client.next_playlist()
         elif name == 'left':
             self.__mpd_client.prev_playlist()
+        elif name == 'up':
+            self.__sleep_helper.increaseGain()
+        elif name == 'down':
+            self.__sleep_helper.decreaseGain()
         # *
         elif scan_code == 55:
             if self.__current_key_sequence is not None:
