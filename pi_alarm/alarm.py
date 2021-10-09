@@ -6,13 +6,14 @@ from pi_alarm.talk_to_me import TalkToMe
 from apscheduler.jobstores.base import JobLookupError
 from apscheduler.schedulers.background import BackgroundScheduler
 from pi_alarm.mpd_client import AlarmMPDClient
-
+from pi_alarm.sleep_helper import SleepHelper
 
 class Alarm:
     JOB_ID = 'wakeup'
 
-    def __init__(self, mpd_client: AlarmMPDClient):
+    def __init__(self, mpd_client: AlarmMPDClient, sleep_helper: SleepHelper):
         self.__mpd_client = mpd_client
+        self.__sleep_helper = sleep_helper
         self.__scheduler = BackgroundScheduler()
         self.__scheduler.start()
         self.__reset_alarm()
@@ -63,6 +64,7 @@ class Alarm:
             self.__scheduler.add_job(self.__ring_alarm, 'date', run_date=self.__next_wakeup_time, id=self.JOB_ID, replace_existing=True)
 
     def __ring_alarm(self):
+        self.__sleep_helper.stop()
         # keep alive needed to keep alive when timed out
         self.__mpd_client.keep_alive()
         self.__mpd_client.play()

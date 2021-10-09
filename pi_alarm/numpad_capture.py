@@ -2,16 +2,18 @@ from abc import ABC, abstractmethod
 from pi_alarm.alarm import Alarm, WakeupTime
 from pi_alarm.talk_to_me import TalkToMe
 from pi_alarm.mpd_client import AlarmMPDClient
+from pi_alarm.sleep_helper import SleepHelper
 import keyboard
 import platform
 
 
 class NumpadCapture:
-    def __init__(self, mpd_client: AlarmMPDClient, alarm: Alarm):
+    def __init__(self, mpd_client: AlarmMPDClient, alarm: Alarm, sleep_helper: SleepHelper):
         self.__mpd_client = mpd_client
         self.__isWindows = platform.system() == 'Windows'
         self.__current_key_sequence: KeySequence = None
         self.__alarm = alarm
+        self.__sleep_helper = sleep_helper
         keyboard.on_release(lambda e: self.processKey(e.name, e.scan_code))
 
     def start(self):
@@ -26,16 +28,19 @@ class NumpadCapture:
             self.__mpd_client.play_pause()
         elif name == 'backspace':
             self.__mpd_client.stop()
+            self.__sleep_helper.stop()
         elif name == '-':
             self.__mpd_client.prev_song()
-        elif name == '+':
-            self.__mpd_client.next_song()
         elif name == '+':
             self.__mpd_client.next_song()
         elif name == 'right':
             self.__mpd_client.next_playlist()
         elif name == 'left':
             self.__mpd_client.prev_playlist()
+        # Start sleep helper and stop alarm
+        elif name == '0':
+            self.__mpd_client.stop()
+            self.__sleep_helper.start()
         # *
         elif scan_code == 55:
             if self.__current_key_sequence is not None:
