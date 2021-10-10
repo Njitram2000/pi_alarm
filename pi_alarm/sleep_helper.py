@@ -12,16 +12,15 @@ class SleepHelper:
         if self.isRunning():
             return
         
-        testText = 'Hello world. I am the ruler and I am here to stay.'
-
         if platform.system() == 'Windows':
             self.__vlcProcess = subprocess.Popen(['tools/vlc-3.0.11/vlc', '-I dummy', '--dummy-quiet',
                             '.\\audio_samples\\ocean_sample.mp3'],
                             stdout=subprocess.PIPE,
                             stderr=subprocess.STDOUT)
         else:
+            # Make a symbolic link from /home/pi/audio/sleep_helper.mp3 to the actual audio file to easily switch which file to play
             self.__vlcProcess = subprocess.Popen(['cvlc', '--play-and-exit', '-I dummy', '--quiet', '--gain', self.gain,
-                            '/home/pi/audio/ocean_10_hours.mp3'],
+                            '/home/pi/audio/sleep_helper.mp3'],
                             stdout=subprocess.PIPE,
                             stderr=subprocess.STDOUT)
     
